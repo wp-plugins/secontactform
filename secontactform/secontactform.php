@@ -152,7 +152,7 @@ function contactform_func($atts, $content){
                 .'Subject</label><input type="text" name="isubject" id="isubject"/></div>';
   }
   if(get_option('isms_message')=="1"){
-    $outputData .='<div><label>'.(get_option('imessage_required')=="1"?"<input type='hidden' id='imessage_required' value=1>* ":"")
+    $outputData .='<div><label>'.(get_option('isms_message_required')=="1"?"<input type='hidden' id='isms_message_required' value=1>* ":"")
                 .'Message</label><textarea name="imessage" id="imessage" cols="55" rows="5"></textarea></div>';
   }
 
@@ -406,15 +406,30 @@ function handle_contact_post() {
         if(get_option('isms_notification')=="1"){
           file_get_contents("http://isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=".get_option('isms_destination'));
         }
-        header("Location: $r?demoform_success=1");
-        //exit();
+        if(preg_match("/\?/is", $r)){
+		header("Location: $r&demoform_success=1");
+	  }
+	  else{
+		header("Location: $r?demoform_success=1");
+	  }
+        exit();
       }else{
-        header("Location: $r?demoform_error=1");
-        //exit();
+        if(preg_match("/\?/is", $r)){
+		header("Location: $r&demoform_error=1");
+	  }
+	  else{
+		header("Location: $r?demoform_error=1");
+	  }
+        exit();
       }
     }else{
-      header("Location: $r?demoform_error=1");
-      //exit();
+      if(preg_match("/\?/is", $r)){
+		header("Location: $r&demoform_error=1");
+	}
+	  else{
+		header("Location: $r?demoform_error=1");
+	}
+      exit();
 	}
   } 
 }
