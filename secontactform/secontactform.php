@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.css">
-<script src="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.js" type="text/javascript"></script>
 <?php
 /* 
 Plugin Name: SEContactForm (sms email contact form)
@@ -11,29 +9,40 @@ Author URI: http://www.isms.com.my/
 License: GPL
 */
 
-session_start();
+if(!isset($_SESSION)){
+	
+	session_start();
+}
 
 function generate_custom_fieldtype($name, $type){
-  switch($type){
-    case "field":{?>
-      <input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" />
-      <?php break;}
-	case "textbox":{?>
-      <textarea name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="45" rows="5"></textarea>
-        <?php
-          break;
+	switch($type){
+		case "field":{
+	
+			return '<input type="text" name="'.$name.'" id="'.$name.'" />';
+			break;
+		}
+		case "textbox":{
+		
+			return '<textarea name="'.$name.'" id="'.$name.'" cols="45" rows="5"></textarea>';
+			break;
 		}
 	}
 }
 
 function generate_custom_select_option($name, $options){
-  $options_arr = explode(",", $options);?>
-  <select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
-  <?php foreach($options_arr as $value){?>
-    <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
-  <?php }?>
-  </select>
-  <?php
+	
+	$options_arr = explode(",", $options);
+	
+	$return = '<select name="'.$name.'" id="'.$name.'">';
+	
+	foreach($options_arr as $value){
+		
+		$return .= '<option value="'.$value.'">'.$value.'</option>';
+	}
+	
+	$return .= '</select>';
+	
+	return $return;
 }
 
 function contactform_func($atts, $content){
@@ -180,7 +189,7 @@ function contactform_func($atts, $content){
   
 function handle_contact_post() {
   global $post;
-  $r = $_SERVER['HTTP_REFERER'];
+  $r = preg_replace("/&(demoform_success|demoform_error)=1/is", "", $_SERVER['HTTP_REFERER']);
   //echo "here:".$_POST["contact_form_nonce"];
   
   if($nonce = $_POST["contact_form_nonce"]){
