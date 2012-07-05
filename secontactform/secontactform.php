@@ -39,7 +39,9 @@ function generate_custom_select_option($name, $options){
 function contactform_func($atts, $content){
   global $post;
   
-  $outputData="";
+  //$outputData='<link rel="stylesheet" type="text/css" media="all" href="'.WP_PLUGIN_URL.'/secontactform/css/style.css" />';
+  $outputData='<link rel="stylesheet" type="text/css" href="'.WP_PLUGIN_URL.'/secontactform/include/contactform.css">
+			<script src="'.WP_PLUGIN_URL.'/secontactform/include/contactform.js" type="text/javascript"></script>';
   $permalink = get_permalink($post->ID);
   
   if($error = $_GET["demoform_error"]){
@@ -537,6 +539,8 @@ function custom_field_type($name, $type){?>
 }
 
 function email_sms_html_page(){?>
+<link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.css">
+<script src="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.js" type="text/javascript"></script>
 <div>
 <h2>SE Contact Form (SMS Email Contact form)</h2>
   <form method="post" action="options.php">
