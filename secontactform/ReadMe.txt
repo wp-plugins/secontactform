@@ -39,4 +39,19 @@ for iSMS
 2. Then set your username and password into the form to send SMS notification when anyone submitted the inquiry.
 
 [Support](http://isms.com.my/se_contact_form.php)
-Contact us for any issue, bug fix. 
+Contact us for any issue, bug fix.
+
+== Change Log ==
+1.1.0
+-Updated bugged mobile phone field in both javascript and form
+-Some functions rewritten to return values instead of printing output directly
+-Removed some extra texts at the top that was not removed in the last revision
+-Existence of a session is checked before starting a session
+-Parameters prevented from stacking behind URL
+-Moved includes into function to fix extra bytes problem when installing the plugin
+-Fixed message required name typo
+-Allow redirect to work in both pretty URL enabled and non-pretty URL enabled wordpress
+-Script property exited after redirects
+
+1.0.0
+-Initial release
