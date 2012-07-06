@@ -82,7 +82,7 @@ function contactform_func($atts, $content){
   }
   if(get_option('isms_mobile_phone')=="1"){
     $outputData .='<div><label>'.(get_option('isms_mobile_phone_required')=="1"?"<input type='hidden' id='isms_mobile_phone_required' value=1>* ":"")
-                .'Mobile Phone</label><input type="text" name="isms_mobile_phone" id="isms_mobile_phone"/></div>';
+                .'Mobile Phone</label><input type="text" name="imobilephone" id="imobilephone"/></div>';
   }
   if(get_option('isms_email')=="1"){
     $outputData .='<div><label>'.(get_option('isms_email_required')=="1"?"<input type='hidden' id='isms_email_required' value=1>* ":"")

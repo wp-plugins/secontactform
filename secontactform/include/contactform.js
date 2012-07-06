@@ -44,14 +44,14 @@ function validate(){
     }
   }
   
-  if (document.getElementById('isms_mobile_phone')){
+  if (document.getElementById('imobilephone')){
     if (document.getElementById('isms_mobile_phone_required')){
       if (document.getElementById('isms_mobile_phone_required').value=='1'){
-        if(document.getElementById('isms_mobile_phone').value==""){
-          document.getElementById('isms_mobile_phone').style.borderColor = "red";
+        if(document.getElementById('imobilephone').value==""){
+          document.getElementById('imobilephone').style.borderColor = "red";
           varValid=false;
         }else{
-          document.getElementById('isms_mobile_phone').style.borderColor = "#ddd";
+          document.getElementById('imobilephone').style.borderColor = "#ddd";
                    
         }
       }
