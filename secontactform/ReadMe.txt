@@ -42,6 +42,9 @@ for iSMS
 Contact us for any issue, bug fix.
 
 == Change Log ==
+1.1.1
+-Updated some interface and CSS
+
 1.1.0
 -Updated bugged mobile phone field in both javascript and form
 -Some functions rewritten to return values instead of printing output directly
