@@ -42,6 +42,11 @@ for iSMS
 Contact us for any issue, bug fix.
 
 == Change Log ==
+1.1.4
+-Changed country field from text field to select field
+-A default list of countries are preloaded
+-Added option to define own list of countries
+
 1.1.3
 -Updated error in custom field 1 loading values in custom field 2
 -Captcha field correctly aligned

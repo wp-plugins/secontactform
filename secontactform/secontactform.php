@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability.
-Version: 1.1.2
+Version: 1.1.4
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -112,8 +112,14 @@ function contactform_func($atts, $content){
   }   
   if(get_option('isms_country')=="1"){
     $outputData .='<div class="list01">
-				<div class="list01-left"><label>'.(get_option('isms_country_required')=="1"?"<input type='hidden' id='isms_country_required' value='1'>* ":"")
-                .'Country</label></div><div class="list01-right"><input type="text" name="icountry" id="icountry"/></div></div><div class="clear"></div>';
+				<div class="list01-left"><label>'.(get_option('isms_country_required')=="1"?"<input type='hidden' id='isms_country_required' value='1'>* ":"").'Country</label></div>
+				<div class="list01-right">
+					<select name="icountry" id="icountry">
+						<option value="">--Please select--</option>
+						'.list_of_countries().'
+					</select>
+				</div>
+			</div><div class="clear"></div>';
   }     
   if(get_option('isms_passport_no')=="1"){
     $outputData .='<div class="list01">
@@ -554,6 +560,7 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'isms_mobile_phone' ); register_setting( 'email-sms-settings-group', 'isms_mobile_phone_required' );
   register_setting( 'email-sms-settings-group', 'isms_address' ); register_setting( 'email-sms-settings-group', 'isms_address_required' );
   register_setting( 'email-sms-settings-group', 'isms_country' ); register_setting( 'email-sms-settings-group', 'isms_country_required' );
+  register_setting( 'email-sms-settings-group', 'isms_country_list' );
   register_setting( 'email-sms-settings-group', 'isms_subject' ); register_setting( 'email-sms-settings-group', 'isms_subject_required' );
   register_setting( 'email-sms-settings-group', 'isms_email' ); register_setting( 'email-sms-settings-group', 'isms_email_required' );
   register_setting( 'email-sms-settings-group', 'isms_reemail' ); register_setting( 'email-sms-settings-group', 'isms_reemail_required' );
@@ -623,7 +630,7 @@ function email_sms_html_page(){?>
             <div><label>iSMS username</label><input name="isms_user_name" type="text" id="isms_user_name" value="<?php echo get_option('isms_user_name'); ?>" /></div>
             <div><label>iSMS password</label><input name="isms_password" type="text" id="isms_password" value="<?php echo get_option('isms_password'); ?>" /></div>
             <div><label>Destination Phone</label><input name="isms_destination" type="text" id="isms_destination" value="<?php echo get_option('isms_destination'); ?>" />
-            <span>(Separate multiple phones with semicolon ;. Please insert full phone number including country code.)</span>
+            <span>(Separate multiple phones with semicolon(;). Please insert full phone number including country code.)</span>
             </div>
             <div><label>Notify owner with SMS</label><input name="isms_notification" type="checkbox" id="isms_notification" value="1" <?php echo get_option('isms_notification')=="1"?"checked":""; ?> /></div>
             <div><label>Add to iSMS address book</label><input name="isms_addressbook" type="checkbox" id="isms_addressbook" value="1" <?php echo get_option('isms_addressbook')=="1"?"checked":""; ?> /></div>
@@ -642,7 +649,7 @@ function email_sms_html_page(){?>
             <div><label>Use SSL</label><input name="isms_smtp_ssl" type="checkbox" id="isms_smtp_ssl" value="1" <?php echo get_option('isms_smtp_ssl')=="1"?"checked":""; ?> /></div>
             <div><label>Destination email</label>
               <textarea name="notification_email" id="notification_email" cols="45" rows="5"><?php echo get_option('notification_email'); ?></textarea>
-              <span>Please use semicolon ; to separate multiple recipient</span>
+              <span>Please use semicolon(;) to separate multiple recipient.</span>
             </div>
           </fieldset>
         </td>
@@ -668,6 +675,10 @@ function email_sms_html_page(){?>
             <div><label>Mobile Phone</label><input name="isms_mobile_phone" type="checkbox" id="isms_mobile_phone" value="1" <?php echo get_option('isms_mobile_phone')=="1"?"checked":""; ?> /> Required <input name="isms_mobile_phone_required" type="checkbox" id="isms_mobile_phone_required" value="1" <?php echo get_option('isms_mobile_phone_required')=="1"?"checked":""; ?> /></div>
             <div><label>Address</label><input name="isms_address" type="checkbox" id="isms_address" value="1" <?php echo get_option('isms_address')=="1"?"checked":""; ?> /> Required <input name="isms_address_required" type="checkbox" id="isms_address_required" value="1" <?php echo get_option('isms_address_required')=="1"?"checked":""; ?> /></div>
             <div><label>Country</label><input name="isms_country" type="checkbox" id="isms_country" value="1" <?php echo get_option('isms_country')=="1"?"checked":""; ?> /> Required <input name="isms_country_required" type="checkbox" id="isms_country_required" value="1" <?php echo get_option('isms_country_required')=="1"?"checked":""; ?> /></div>
+            <div><label>Custom Countries</label>
+              <textarea name="isms_country_list" id="isms_country_list" cols="45" rows="5"><?php echo get_option('isms_country_list'); ?></textarea>
+              <span>Please use semicolon(;) to separate multiple countries. Default list of countries will be loaded if left empty.</span>
+            </div>
             <div><label>Passport No.</label><input name="isms_passport_no" type="checkbox" id="isms_passport_no" value="1" <?php echo get_option('isms_passport_no')=="1"?"checked":""; ?> /> Required <input name="isms_passport_no_required" type="checkbox" id="isms_passport_no_required" value="1" <?php echo get_option('isms_passport_no_required')=="1"?"checked":""; ?> /></div>
             <div><label>Social Security No.</label><input name="isms_social_security_no" type="checkbox" id="isms_social_security_no" value="1" <?php echo get_option('isms_social_security_no')=="1"?"checked":""; ?> /> Required <input name="isms_social_security_no_required" type="checkbox" id="isms_social_security_no_required" value="1" <?php echo get_option('isms_social_security_no_required')=="1"?"checked":""; ?> /></div>
             <div><label>Date Of Birth</label><input name="isms_dob" type="checkbox" id="isms_dob" value="1" <?php echo get_option('isms_dob')=="1"?"checked":""; ?> /> Required <input name="isms_dob_required" type="checkbox" id="isms_dob_required" value="1" <?php echo get_option('isms_dob_required')=="1"?"checked":""; ?> /></div>
@@ -740,3 +751,237 @@ function email_sms_html_page(){?>
 </form>
 </div>
 <?php }?>
+<?php
+
+function list_of_countries(){
+	
+	$countries = '"Afghanistan"
+				"Albania"
+				"Algeria"
+				"American Samoa"
+				"Andorra"
+				"Angola"
+				"Antigua and Barbuda"
+				"Argentina"
+				"Armenia"
+				"Aruba"
+				"Australia"
+				"Austria"
+				"Azerbaijan"
+				"Bahrain"
+				"Bangladesh"
+				"Barbados"
+				"Belarus"
+				"Belgium"
+				"Belize"
+				"Benin"
+				"Bermuda"
+				"Bhutan"
+				"Bissau"
+				"Bolivia"
+				"Botswana"
+				"Brazil"
+				"Brunei"
+				"Bulgaria"
+				"Burkina Faso"
+				"Burundi"
+				"Cambodia"
+				"Cameroon"
+				"Canada"
+				"Cape Verde"
+				"Cayman Islands"
+				"Central African Republic"
+				"Chad"
+				"Chile"
+				"China"
+				"Chinese Horoscope"
+				"Colombia"
+				"Comoros"
+				"Congo"
+				"Congo Democratic Republic"
+				"Cook Islands"
+				"Costa Rica"
+				"Croatia"
+				"Cuba"
+				"Cyprus"
+				"Czech Republic"
+				"Denmark"
+				"Djibouti"
+				"Dominican Republic"
+				"East Timor"
+				"Ecuador"
+				"Egypt"
+				"El Salvador"
+				"English Horoscope"
+				"Equatorial Guinea"
+				"Eritrea"
+				"Estonia"
+				"Ethiopia"
+				"Faeroes Islands"
+				"Falkland Islands"
+				"Fiji"
+				"Finland"
+				"France"
+				"French Guiana"
+				"French Polynesia"
+				"Gabon"
+				"Gambia"
+				"Georgia"
+				"Germany"
+				"Ghana"
+				"Gibraltar"
+				"Greece"
+				"Greenland"
+				"Grenada"
+				"Guam"
+				"Guatemala"
+				"Guinea"
+				"Guyana"
+				"Haiti"
+				"Herzegovina"
+				"Honduras"
+				"Hong Kong"
+				"Hungary"
+				"Iceland"
+				"India"
+				"Indonesia"
+				"Iran"
+				"Iraq"
+				"Ireland"
+				"Israel"
+				"Italy"
+				"Ivory Coast"
+				"Jamaica"
+				"Japan"
+				"Jordan"
+				"Kazakhstan"
+				"Kenya"
+				"Kiribati"
+				"Kuwait"
+				"Kyrgyzstan"
+				"Laos"
+				"Latvia"
+				"Lebanon"
+				"Lesotho"
+				"Liberia"
+				"Libya"
+				"Liechtenstein"
+				"Lithuania"
+				"Luxembourg"
+				"Macao"
+				"Macedonia"
+				"Madagascar"
+				"Malawi"
+				"Malaysia"
+				"Maldives"
+				"Mali"
+				"Malta"
+				"Martinique"
+				"Mauritania"
+				"Mauritius"
+				"Mayotte"
+				"Mexico"
+				"Micronesia"
+				"Moldova"
+				"Monaco"
+				"Mongolia"
+				"Morocco"
+				"Mozambique"
+				"Myanmar"
+				"Namibia"
+				"Nepal"
+				"Netherlands"
+				"Netherlands Antilles"
+				"New Caledonia"
+				"New Zealand"
+				"Nicaragua"
+				"Niger"
+				"Nigeria"
+				"North Korea"
+				"Northern Mariana Islands"
+				"Norway"
+				"Oman"
+				"Pakistan"
+				"Palestinian Territory"
+				"Panama"
+				"Papua New Guinea"
+				"Paraguay"
+				"Peru"
+				"Philippines"
+				"Poland"
+				"Portugal"
+				"Qatar"
+				"Reunion"
+				"Romania"
+				"Russian Federation"
+				"Rwanda"
+				"San Marino"
+				"Sao Tome and Principe"
+				"Saudi Arabia"
+				"Senegal"
+				"Serbia and Montenegro"
+				"Seychelles"
+				"Sierra Leone"
+				"Singapore"
+				"Slovak Republic"
+				"Slovenia"
+				"Somalia"
+				"South Africa"
+				"South Korea"
+				"Spain"
+				"Sri Lanka"
+				"St Kitts and Nevis"
+				"St Lucia"
+				"St Pierre and Miquelon"
+				"St Vincent and the Grenadines"
+				"Sudan"
+				"Suriname"
+				"Swaziland"
+				"Sweden"
+				"Switzerland"
+				"Syria"
+				"Taiwan"
+				"Tajikistan"
+				"Tanzania"
+				"Thailand"
+				"Thuraya"
+				"Togo"
+				"Tonga"
+				"Trinidad and Tobago"
+				"Tunisia"
+				"Turkey"
+				"Turkmenistan"
+				"Uganda"
+				"Ukraine"
+				"United Arab Emirates"
+				"United Kingdom"
+				"United States"
+				"Uruguay"
+				"US Virgin Islands"
+				"Uzbekistan"
+				"Vanuatu"
+				"Venezuela"
+				"Viet Nam"
+				"Yemen"
+				"Zambia"
+				"Zimbabwe"';
+	
+	if(get_option('isms_country_list') != ""){
+		
+		$countries = trim(str_replace(";", ",", get_option('isms_country_list')));
+	}
+	
+	$countries = str_replace(array("\r\n", "\n\r", "\r", "\n", "\t"), "", $countries);
+	$countries = trim(str_replace('""', ",", $countries), '"');
+	
+	$return = "";
+	$countries_arr = explode(",", $countries);
+	foreach($countries_arr as $value){
+		
+		$return .= '<option value="'.trim($value).'">'.trim($value).'</option>';
+	}
+	
+	return $return;
+}
+
+?>

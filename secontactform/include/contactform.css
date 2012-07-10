@@ -122,6 +122,17 @@ fieldset.bmostyle input {
 	-moz-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
+
+fieldset.bmostyle select {
+	padding:0.15em;
+	width:12em;
+	border:1px solid #ddd;
+	background:#fafafa;
+	font:bold 1.0em arial, sans-serif;
+	-moz-border-radius:0.4em;
+	-khtml-border-radius:0.4em;
+}
+
 fieldset.bmostyle div input[type=button]{
 	padding:0.15em;
 	height:21px;
