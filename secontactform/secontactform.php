@@ -55,12 +55,12 @@ function contactform_func($atts, $content){
   
   if($error = $_GET["demoform_error"]){
     //$outputData .= "Error processing submission<br>";
-    $outputData .= "<span style='color:red'>".$_SESSION['error_text']."</span>";
+    $outputData .= "<div class='box box-error' style='font-size:13px;'>".$_SESSION['error_text']."</div>";
   }elseif($success = $_GET["demoform_success"]){
     if (get_option('form_success_msg')){
-      $outputData .= "<span style='color:blue'>".get_option('form_success_msg')."</span><br/>";
+      $outputData .= "<div class='box box-success' style='font-size:13px;'>".get_option('form_success_msg')."</div>";
     }else{
-      $outputData .= "<span style='color:blue'>Thank you for your submission.</span><br/>";
+      $outputData .= "<div class='box box-success' style='font-size:13px;'>Thank you for your submission.</div>";
     }
   }
   

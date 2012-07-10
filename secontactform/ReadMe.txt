@@ -42,6 +42,9 @@ for iSMS
 Contact us for any issue, bug fix.
 
 == Change Log ==
+1.1.2
+-Added some icons to messages
+
 1.1.1
 -Updated some interface and CSS
 

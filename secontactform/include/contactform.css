@@ -152,3 +152,47 @@ input[type=checkbox], input[type=radio]
 { 
 	width:20px;
 }
+
+/* --------------------------- box style ------------------ */
+
+.box {
+	padding: 8px;
+	margin-bottom:8px;
+	color:#555;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	background:#eee;
+}
+
+.box-success{
+	padding-left: 32px;
+	border-top:1px solid #BBDF8D;
+	border-bottom:1px solid #BBDF8D;
+	background:#EAF7D9 url("icons/accept.png");
+	background-repeat: no-repeat;
+	background-position: 8px 8px;
+}
+
+.box-error{
+	padding-left: 32px;
+	border-top:1px solid #F8ACAC;
+	border-bottom:1px solid #F8ACAC;
+	background-color: #FFD1D1;
+	background-image: url("icons/exclamation.png");
+	background-repeat: no-repeat;
+	background-position: 8px 8px;
+}
+
+.box-info {
+	padding-left: 32px;
+	border-top:1px solid #B8E2FB;
+	border-bottom:1px solid #B8E2FB;
+	background:#E8F6FF url("icons/information.png") no-repeat 8px 50%;
+}
+
+.box-warning{
+	padding-left: 32px;
+	border-top:1px solid #F2DD8C;
+	border-bottom:1px solid #F2DD8C;
+	background:#FFF5CC url("icons/error.png") no-repeat 8px 50%;
+}
