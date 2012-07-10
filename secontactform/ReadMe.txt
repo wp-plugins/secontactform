@@ -42,6 +42,10 @@ for iSMS
 Contact us for any issue, bug fix.
 
 == Change Log ==
+1.1.3
+-Updated error in custom field 1 loading values in custom field 2
+-Captcha field correctly aligned
+
 1.1.2
 -Added some icons to messages
 

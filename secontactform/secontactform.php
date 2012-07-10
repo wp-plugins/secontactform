@@ -154,8 +154,8 @@ function contactform_func($atts, $content){
 
   if(get_option('isms_custom1')=="1"){
     $outputData .='<div class="list01">
-				<div class="list01-left"><label>'.(get_option('isms_custom2_required')=="1"?"<input type='hidden' id='isms_custom2_required' value='1'>* ":"").get_option('isms_custom_name2').'</label></div>
-				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name2", get_option('isms_custom_type2')).'</div>
+				<div class="list01-left"><label>'.(get_option('isms_custom1_required')=="1"?"<input type='hidden' id='isms_custom1_required' value='1'>* ":"").get_option('isms_custom_name1').'</label></div>
+				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name1", get_option('isms_custom_type1')).'</div>
 			</div><div class="clear"></div>';
   }   
   if(get_option('isms_custom2')=="1"){
@@ -217,7 +217,7 @@ function contactform_func($atts, $content){
   if(get_option('isms_captcha')=="1"){
     $outputData .='<div><label>&nbsp;</label><img src="'.WP_PLUGIN_URL.'/secontactform/include/captcha.php" id="captcha" /></div>';
     $outputData .='<div class="list01">
-				<div class="list01-left">Captcha</div>
+				<div class="list01-left"><label>Captcha</label></div>
 				<div class="list01-right"><input type="text" name="captchatxt" id="captchatxt" /></div>
 			</div><div class="clear"></div>';
   }
