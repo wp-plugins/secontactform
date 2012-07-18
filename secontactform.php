@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability.
-Version: 1.1.5
+Version: 1.1.6
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -72,43 +72,43 @@ function contactform_func($atts, $content){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_name_required')=="1"?"<input type='hidden' id='isms_name_required' value='1'>* ":"").'Full Name</label></div>
 				<div class="list01-right"><input type="text" name="iname" id="iname"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_first_name')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_first_name_required')=="1"?"<input type='hidden' id='isms_first_name_required' value='1'>* ":"").'First Name</label></div>
 				<div class="list01-right"><input type="text" name="ifirstname" id="ifirstname"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_last_name')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_last_name_required')=="1"?"<input type='hidden' id='isms_last_name_required' value='1'>* ":"").'Last Name</label></div>
 				<div class="list01-right"><input type="text" name="ilastname" id="ilastname"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_mobile_phone')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_mobile_phone_required')=="1"?"<input type='hidden' id='isms_mobile_phone_required' value='1'>* ":"").'Mobile Phone</label></div>
 				<div class="list01-right"><input type="text" name="imobilephone" id="imobilephone"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_email')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_email_required')=="1"?"<input type='hidden' id='isms_email_required' value='1'>* ":"").'Email</label></div>
 				<div class="list01-right"><input type="text" name="iemail" id="iemail"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_reemail')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_reemail_required')=="1"?"<input type='hidden' id='isms_reemail_required' value='1'>* ":"").'Reconfirm Email</label></div>
 				<div class="list01-right"><input type="text" name="ireemail" id="ireemail"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   } 
   if(get_option('isms_address')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_address_required')=="1"?"<input type='hidden' id='isms_address_required' value='1'>* ":"").'Address</label></div>
 				<div class="list01-right"><input type="text" name="iaddress" id="iaddress"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }   
   if(get_option('isms_country')=="1"){
     $outputData .='<div class="list01">
@@ -119,105 +119,105 @@ function contactform_func($atts, $content){
 						'.list_of_countries().'
 					</select>
 				</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }     
   if(get_option('isms_passport_no')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_passport_no_required')=="1"?"<input type='hidden' id='isms_passport_no_required' value='1'>* ":"").'Passport No.</label></div>
 				<div class="list01-right"><input type="text" name="ipassport" id="ipassport"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }       
   if(get_option('isms_social_security_no')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_social_security_no_required')=="1"?"<input type='hidden' id='isms_social_security_no_required' value='1'>* ":"").'Social Security No.</label></div>
 				<div class="list01-right"><input type="text" name="isocial_security_no" id="isocial_security_no"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }       
   if(get_option('isms_dob')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_dob_required')=="1"?"<input type='hidden' id='isms_dob_required' value='1'>* ":"").'Date of Birth</label></div>
 				<div class="list01-right"><input type="text" name="idob" id="idob"/>(dd/mm/yyyy)</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }         
   if(get_option('isms_company')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_company_required')=="1"?"<input type='hidden' id='isms_company_required' value='1'>* ":"").'Company</label></div>
 				<div class="list01-right"><input type="text" name="icompany" id="icompany"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_product')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_product_required')=="1"?"<input type='hidden' id='isms_product_required' value='1'>* ":"").'Product</label></div>
 				<div class="list01-right"><input type="text" name="iproduct" id="iproduct"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }  
   if(get_option('isms_website')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_website_required')=="1"?"<input type='hidden' id='isms_website_required' value='1'>* ":"").'Website</label></div>
 				<div class="list01-right"><input type="text" name="iwebsite" id="iwebsite"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }   
 
   if(get_option('isms_custom1')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom1_required')=="1"?"<input type='hidden' id='isms_custom1_required' value='1'>* ":"").get_option('isms_custom_name1').'</label></div>
 				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name1", get_option('isms_custom_type1')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }   
   if(get_option('isms_custom2')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom2_required')=="1"?"<input type='hidden' id='isms_custom2_required' value='1'>* ":"").get_option('isms_custom_name2').'</label></div>
 				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name2", get_option('isms_custom_type2')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_custom3')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom3_required')=="1"?"<input type='hidden' id='isms_custom3_required' value='1'>* ":"").get_option('isms_custom_name3').'</label></div>
 				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name3", get_option('isms_custom_type3')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_custom4')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom4_required')=="1"?"<input type='hidden' id='isms_custom4_required' value='1'>* ":"").get_option('isms_custom_name4').'</label></div>
 				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name4", get_option('isms_custom_type4')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_custom5')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom5_required')=="1"?"<input type='hidden' id='isms_custom5_required' value='1'>* ":"").get_option('isms_custom_name5').'</label></div>
 				<div class="list01-right">'.generate_custom_fieldtype("cisms_custom_name5", get_option('isms_custom_type5')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
 
   if(get_option('isms_custom_select1')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom_select1_required')=="1"?"<input type='hidden' id='isms_custom_select1_required' value='1'>* ":"").get_option('isms_custom_select_name1').'</label></div>
 				<div class="list01-right">'.generate_custom_select_option("cisms_custom_select_name1", get_option('isms_custom_select_option1')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_custom_select2')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom_select2_required')=="1"?"<input type='hidden' id='isms_custom_select2_required' value='1'>* ":"").get_option('isms_custom_select_name2').'</label></div>
 				<div class="list01-right">'.generate_custom_select_option("cisms_custom_select_name2", get_option('isms_custom_select_option2')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_custom_select3')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_custom_select3_required')=="1"?"<input type='hidden' id='isms_custom_select3_required' value='1'>* ":"").get_option('isms_custom_select_name3').'</label></div>
 				<div class="list01-right">'.generate_custom_select_option("cisms_custom_select_name3", get_option('isms_custom_select_option3')).'</div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_subject')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_subject_required')=="1"?"<input type='hidden' id='isms_subject_required' value='1'>* ":"").'Subject</label></div>
 				<div class="list01-right"><input type="text" name="isubject" id="isubject"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   if(get_option('isms_message')=="1"){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>'.(get_option('isms_message_required')=="1"?"<input type='hidden' id='isms_message_required' value='1'>* ":"").'Message</label></div>
 				<div class="list01-right"><textarea name="imessage" id="imessage" cols="55" rows="5"></textarea></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
 
   if(get_option('isms_captcha')=="1"){
@@ -225,13 +225,13 @@ function contactform_func($atts, $content){
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>Captcha</label></div>
 				<div class="list01-right"><input type="text" name="captchatxt" id="captchatxt" /></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   }
   
   $outputData .='<div class="list01">
 				<div class="list01-left"></div>
 				<div class="list01-right"><input type="submit" value="Submit" onclick="return validate();"/></div>
-			</div><div class="clear"></div>';
+			<div class="clear"></div></div>';
   $outputData .='</fieldset>'; 
   $outputData .= wp_nonce_field("cfn","contact_form_nonce");
   $outputData .='</form>'; 
