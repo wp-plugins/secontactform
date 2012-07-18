@@ -103,6 +103,7 @@ fieldset.bmostyle textarea {
 	background:#fafafa;
 	font:bold 1.0em arial, sans-serif;
 	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
 
@@ -120,6 +121,7 @@ fieldset.bmostyle input {
 	background:#fafafa;
 	font:bold 1.0em arial, sans-serif;
 	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
 
@@ -130,6 +132,7 @@ fieldset.bmostyle select {
 	background:#fafafa;
 	font:bold 1.0em arial, sans-serif;
 	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
 

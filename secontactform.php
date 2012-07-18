@@ -221,7 +221,7 @@ function contactform_func($atts, $content){
   }
 
   if(get_option('isms_captcha')=="1"){
-    $outputData .='<div><label>&nbsp;</label><img src="'.WP_PLUGIN_URL.'/secontactform/include/captcha.php" id="captcha" /></div>';
+    $outputData .='<div class="list01"><div class="list01-left"><label>&nbsp;</label></div><div class="list01-right"><img src="'.WP_PLUGIN_URL.'/secontactform/include/captcha.php" id="captcha" /></div><div class="clear"></div></div>';
     $outputData .='<div class="list01">
 				<div class="list01-left"><label>Captcha</label></div>
 				<div class="list01-right"><input type="text" name="captchatxt" id="captchatxt" /></div>
