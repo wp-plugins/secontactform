@@ -42,6 +42,10 @@ For basic usage, you can also have a look at the [plugin homepage](http://isms.c
 Contact us for any issue, bug fix.
 
 == Changelog ==
+= 1.1.5 =
+* Folder secontactform removed
+* Renamed readme.txt
+
 = 1.1.4 =
 * Changed country field from text field to select field
 * A default list of countries are preloaded
