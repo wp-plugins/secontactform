@@ -42,6 +42,12 @@ For basic usage, you can also have a look at the [plugin homepage](http://isms.c
 Contact us for any issue, bug fix.
 
 == Changelog ==
+= 1.1.7 =
+* More bug fixes
+
+= 1.1.6 =
+* More bug fixes
+
 = 1.1.5.2 =
 * More bug fixes
 
