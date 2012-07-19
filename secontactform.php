@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability.
-Version: 1.1.7
+Version: 1.1.8
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -248,7 +248,7 @@ function contactform_func($atts, $content){
   
 function handle_contact_post() {
   global $post;
-  $r = preg_replace("/&(demoform_success|demoform_error)=1/is", "", $_SERVER['HTTP_REFERER']);
+  $r = preg_replace("/[\?&]*(demoform_success|demoform_error)=1/is", "", $_SERVER['HTTP_REFERER']);
   //echo "here:".$_POST["contact_form_nonce"];
   
   if($nonce = $_POST["contact_form_nonce"]){
