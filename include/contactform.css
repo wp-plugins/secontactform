@@ -162,6 +162,104 @@ fieldset.bmostyle input:hover, input:focus {
 	background:#f6f6f6;
 }
 
+fieldset.bmostyle_admin {
+	margin:0.3em 0;
+	clear:both;
+	font:1.0em arial, sans-serif;
+	border: 1px solid #ddd;
+	padding:0 0.5em 0.5em;
+  }
+fieldset.bmostyle_admin legend {
+ 	color:#0b77b7;
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
+  }
+fieldset.bmostyle_admin fieldsetContent {
+  margin: 0.5em 0.5em 0.5em 0.5em;
+  }
+
+fieldset.bmostyle_admin div {
+	margin:0.3em 0;
+	clear:both;
+	font:1.0em arial, sans-serif;
+
+}
+fieldset.bmostyle_admin label {
+	float:left;
+	width:11em;
+	text-align:right;
+	margin-right:1em;
+    color:#707070;
+	/*vertical-align:center;*/
+}
+
+fieldset.bmostyle_admin textarea {
+	padding:0.15em;
+	width:17em;
+	border:1px solid #ddd;
+	background:#fafafa;
+	font:bold 1.0em arial, sans-serif;
+	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
+	-khtml-border-radius:0.4em;
+}
+
+fieldset.bmostyle_admin div span{
+    padding-left:12em;
+    float:left;
+	font:1.0em arial, sans-serif;
+
+}
+
+fieldset.bmostyle_admin input {
+	padding:0.15em;
+	width:12em;
+	border:1px solid #ddd;
+	background:#fafafa;
+	font:bold 1.0em arial, sans-serif;
+	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
+	-khtml-border-radius:0.4em;
+}
+
+fieldset.bmostyle_admin select {
+	padding:0.15em;
+	width:12em;
+	border:1px solid #ddd;
+	background:#fafafa;
+	font:bold 1.0em arial, sans-serif;
+	-moz-border-radius:0.4em;
+	-webkit-border-radius:0.4em;
+	-khtml-border-radius:0.4em;
+}
+
+fieldset.bmostyle_admin div input[type=button]{
+	padding:0.15em;
+	height:21px;
+}
+fieldset.bmostyle_admin div input[type=submit]{
+	padding:0.15em;
+    background-color:grey;
+    color:white;
+    width:80px;
+	/*width:auto;*/
+}
+
+fieldset.bmostyle_admin div input[type=checkbox]{
+	padding:0.15em;
+	width:20px;
+}
+
+fieldset.bmostyle_admin div input[type=file]{
+	padding:0.15em;
+	height:21px;
+}
+fieldset.bmostyle_admin input:hover, input:focus {
+	border-color:#c5c5c5;
+	background:#f6f6f6;
+}
+
 input[type=checkbox], input[type=radio] 
 { 
 	width:20px;

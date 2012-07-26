@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
-Version: 1.1.8
+Version: 1.2.0
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -442,7 +442,7 @@ function handle_contact_post() {
             $multipleDestAdd_arr=split(";",get_option('notification_email'));
             
             foreach ($multipleDestAdd_arr as $multipleDestAdd){
-              $mail->AddAddress($multipleDestAdd, $multipleDestAdd);              
+              $mail->AddAddress(trim($multipleDestAdd), trim($multipleDestAdd));
             }
             if(get_option('isms_email')=="1" && $_POST['iemail'] != ""){
               if(get_option('isms_name')=="1" && $_POST['iname'] != ""){
@@ -461,8 +461,21 @@ function handle_contact_post() {
             } else {
               
             }
+            
+            if(get_option('isms_auto_response') == 1 && get_option('isms_auto_response_msg') != "" && get_option('isms_email') == "1" && $_POST['ireemail'] != ""){
+			
+			$mail->ClearAddresses();
+			$mail->AddAddress(trim($_POST['ireemail']), trim($_POST['ireemail']));
+			$mail->Body     =  nl2br(get_option('isms_auto_response_msg'));
+			if(!$mail->Send()) {
+			  
+			} else {
+			  
+			}
+		}
+            
           }else{
-            mail(get_option('notification_email'), "Contact Form", $message, 'From: "Contact Form" <'.get_option('notification_email').">\n");
+            mail(str_replace(";", ",", get_option('notification_email')), (get_option('form_subject')!=""?get_option('form_subject'):"Contact form"), $message, 'From: "Contact Form" <'.get_option('notification_email').">\n");
           }
         }
         
@@ -552,6 +565,8 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'isms_smtp_username' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_password' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_email' );
+  register_setting( 'email-sms-settings-group', 'isms_auto_response' );
+  register_setting( 'email-sms-settings-group', 'isms_auto_response_msg' );
   register_setting( 'email-sms-settings-group', 'notification_email' );
   /////
   register_setting( 'email-sms-settings-group', 'isms_name' ); register_setting( 'email-sms-settings-group', 'isms_name_required' );
@@ -600,7 +615,7 @@ function register_mysettings(){
 }
 
 function custom_field_type($name, $type){?>
-	<br>Field Type <select name="<?php echo $name; ?>">
+	<br><label>Field Type</label><select name="<?php echo $name; ?>">
 		<option value="field" <?php echo ($type=="field"?'selected':''); ?>>Field</option>
 		<option value="textbox" <?php echo ($type=="textbox"?'selected':''); ?>>Textbox</option>
 	</select>
@@ -619,7 +634,7 @@ function email_sms_html_page(){?>
     <table>
       <tr>
         <td valign="top" width="50%">
-          <fieldset class="bmostyle">
+          <fieldset class="bmostyle_admin">
             <legend>iSMS</legend>
             <div>Register <a href="http://www.isms.com.my/" target="_blank">isms.com.my</a></div>
               <?php if(get_option('isms_user_name') != "" && get_option('isms_password') != ""){
@@ -639,7 +654,7 @@ function email_sms_html_page(){?>
           </fieldset>
         </td>
         <td valign="top">
-          <fieldset class="bmostyle">
+          <fieldset class="bmostyle_admin">
           <legend>Email</legend>
             <div><label>Use SMTP server</label><input name="isms_smtp_notification" type="checkbox" id="isms_smtp_notification" value="1" <?php echo get_option('isms_smtp_notification')=="1"?"checked":""; ?> /></div>            
             <div><label>SMTP host</label><input name="isms_smtp_host" type="text" id="isms_smtp_host" value="<?php echo get_option('isms_smtp_host'); ?>" /></div>
@@ -651,12 +666,16 @@ function email_sms_html_page(){?>
               <textarea name="notification_email" id="notification_email" cols="45" rows="5"><?php echo get_option('notification_email'); ?></textarea>
               <span>Please use semicolon(;) to separate multiple recipient.</span>
             </div>
+            <div><label>Auto response</label><input name="isms_auto_response" type="checkbox" id="isms_auto_response" value="1" <?php echo get_option('isms_auto_response')=="1"?"checked":""; ?> /></div>            
+            <div><label>Auto response message</label>
+              <textarea name="isms_auto_response_msg" id="isms_auto_response_msg" cols="45" rows="5"><?php echo get_option('isms_auto_response_msg'); ?></textarea>
+            </div>
           </fieldset>
         </td>
       </tr>
     </table>
     
-  <fieldset class="bmostyle">
+  <fieldset class="bmostyle_admin">
     <legend>Form setting</legend>
     <table>
       <tr>
@@ -695,32 +714,31 @@ function email_sms_html_page(){?>
                   Required <input name="isms_custom1_required" type="checkbox" id="isms_custom1_required" value="1" <?php echo get_option('isms_custom1_required')=="1"?"checked":""; ?> />
             </div>
             <div><label>Field Name</label><input name="isms_custom_name1" type="text" id="isms_custom_name1" value="<?php echo get_option('isms_custom_name1'); ?>" />
-              <span><?php custom_field_type('isms_custom_type1', get_option('isms_custom_type1')); ?></span>
+              <?php custom_field_type('isms_custom_type1', get_option('isms_custom_type1')); ?>
             </div>
             <div><hr/></div>
             
             <div><label>Custom Field 2</label><input name="isms_custom2" type="checkbox" id="isms_custom2" value="1" <?php echo get_option('isms_custom2')=="1"?"checked":""; ?> /> Required <input name="isms_custom2_required" type="checkbox" id="isms_custom2_required" value="1" <?php echo get_option('isms_custom2_required')=="1"?"checked":""; ?> /></div>
             <div><label>Field Name</label><input name="isms_custom_name2" type="text" id="isms_custom_name2" value="<?php echo get_option('isms_custom_name2'); ?>" />
-              <span><?php custom_field_type('isms_custom_type2', get_option('isms_custom_type2')); ?>
-              </span>
+              <?php custom_field_type('isms_custom_type2', get_option('isms_custom_type2')); ?>
             </div>
             <div><hr/></div>
             
             <div><label>Custom Field 3</label><input name="isms_custom3" type="checkbox" id="isms_custom3" value="1" <?php echo get_option('isms_custom3')=="1"?"checked":""; ?> /> Required <input name="isms_custom3_required" type="checkbox" id="isms_custom3_required" value="1" <?php echo get_option('isms_custom3_required')=="1"?"checked":""; ?> /></div>
               <div><label>Field Name</label><input name="isms_custom_name3" type="text" id="isms_custom_name3" value="<?php echo get_option('isms_custom_name3'); ?>" />
-                <span><?php custom_field_type('isms_custom_type3', get_option('isms_custom_type3')); ?></span>
+                <?php custom_field_type('isms_custom_type3', get_option('isms_custom_type3')); ?>
               </div>  
             <div><hr/></div>
             
             <div><label>Custom Field 4</label><input name="isms_custom4" type="checkbox" id="isms_custom4" value="1" <?php echo get_option('isms_custom4')=="1"?"checked":""; ?> /> Required <input name="isms_custom4_required" type="checkbox" id="isms_custom4_required" value="1" <?php echo get_option('isms_custom4_required')=="1"?"checked":""; ?> /></div>
               <div><label>Field Name</label><input name="isms_custom_name4" type="text" id="isms_custom_name4" value="<?php echo get_option('isms_custom_name4'); ?>" />
-              <span><?php custom_field_type('isms_custom_type4', get_option('isms_custom_type4')); ?></span>
+              <?php custom_field_type('isms_custom_type4', get_option('isms_custom_type4')); ?>
               </div>
             <div><hr/></div>
             
             <div><label>Custom Field 5</label><input name="isms_custom5" type="checkbox" id="isms_custom5" value="1" <?php echo get_option('isms_custom5')=="1"?"checked":""; ?> /> Required <input name="isms_custom5_required" type="checkbox" id="isms_custom5_required" value="1" <?php echo get_option('isms_custom5_required')=="1"?"checked":""; ?> /></div>
               <div><label>Field Name</label><input name="isms_custom_name5" type="text" id="isms_custom_name5" value="<?php echo get_option('isms_custom_name5'); ?>" />
-              <span><?php custom_field_type('isms_custom_type5', get_option('isms_custom_type5')); ?></span>
+              <?php custom_field_type('isms_custom_type5', get_option('isms_custom_type5')); ?>
               </div>
             <div><hr/></div>
             
