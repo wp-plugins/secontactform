@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
-Version: 1.2.0
+Version: 1.2.1
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -439,10 +439,17 @@ function handle_contact_post() {
             $mail->From     = get_option('isms_smtp_email');
             $mail->FromName = get_option('isms_smtp_username');
             
-            $multipleDestAdd_arr=split(";",get_option('notification_email'));
+            if(get_option('isms_smtp_debug') == "1"){
+			
+			$mail->SMTPDebug = true;
+		}
+            
+            $multipleDestAdd_arr=split(";", trim(get_option('notification_email'), ";"));
             
             foreach ($multipleDestAdd_arr as $multipleDestAdd){
-              $mail->AddAddress(trim($multipleDestAdd), trim($multipleDestAdd));
+			if(strlen($multipleDestAdd) > 5){
+				$mail->AddAddress(trim($multipleDestAdd), trim($multipleDestAdd));
+			}
             }
             if(get_option('isms_email')=="1" && $_POST['iemail'] != ""){
               if(get_option('isms_name')=="1" && $_POST['iname'] != ""){
@@ -457,7 +464,8 @@ function handle_contact_post() {
             $mail->Subject  =  (get_option('form_subject')!=""?get_option('form_subject'):"Contact form");
             $mail->Body     =  nl2br($message);
             if(!$mail->Send()) {
-              
+			$no_error = 0;
+			$_SESSION['error_text'] .= "SMTP error. Try enabling SMTP debug for debugging.<br>";
             } else {
               
             }
@@ -475,7 +483,7 @@ function handle_contact_post() {
 		}
             
           }else{
-            mail(str_replace(";", ",", get_option('notification_email')), (get_option('form_subject')!=""?get_option('form_subject'):"Contact form"), $message, 'From: "Contact Form" <'.get_option('notification_email').">\n");
+            mail(str_replace(";", ",", trim(get_option('notification_email'), ";")), (get_option('form_subject')!=""?get_option('form_subject'):"Contact form"), $message, 'From: "Contact Form" <'.get_option('notification_email').">\n");
           }
         }
         
@@ -489,11 +497,25 @@ function handle_contact_post() {
         if(get_option('isms_notification')=="1"){
           file_get_contents("http://isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=".get_option('isms_destination'));
         }
-        if(preg_match("/\?/is", $r)){
-		header("Location: $r&demoform_success=1");
+        if(get_option('isms_smtp_debug')=="1"){
+		
+		
+	  }
+        elseif($no_error == 0){
+		  if(preg_match("/\?/is", $r)){
+			header("Location: $r&demoform_error=1");
+		  }
+		  else{
+			header("Location: $r?demoform_error=1");
+		  }
 	  }
 	  else{
-		header("Location: $r?demoform_success=1");
+		  if(preg_match("/\?/is", $r)){
+			header("Location: $r&demoform_success=1");
+		  }
+		  else{
+			header("Location: $r?demoform_success=1");
+		  }
 	  }
         exit();
       }else{
@@ -565,6 +587,7 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'isms_smtp_username' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_password' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_email' );
+  register_setting( 'email-sms-settings-group', 'isms_smtp_debug' );
   register_setting( 'email-sms-settings-group', 'isms_auto_response' );
   register_setting( 'email-sms-settings-group', 'isms_auto_response_msg' );
   register_setting( 'email-sms-settings-group', 'notification_email' );
@@ -657,6 +680,7 @@ function email_sms_html_page(){?>
           <fieldset class="bmostyle_admin">
           <legend>Email</legend>
             <div><label>Use SMTP server</label><input name="isms_smtp_notification" type="checkbox" id="isms_smtp_notification" value="1" <?php echo get_option('isms_smtp_notification')=="1"?"checked":""; ?> /></div>            
+            <div><label>SMTP debug</label><input name="isms_smtp_debug" type="checkbox" id="isms_smtp_debug" value="1" <?php echo get_option('isms_smtp_debug')=="1"?"checked":""; ?> /></div>            
             <div><label>SMTP host</label><input name="isms_smtp_host" type="text" id="isms_smtp_host" value="<?php echo get_option('isms_smtp_host'); ?>" /></div>
             <div><label>SMTP username</label><input name="isms_smtp_username" type="text" id="isms_smtp_username" value="<?php echo get_option('isms_smtp_username'); ?>" /></div>
             <div><label>SMTP password</label><input name="isms_smtp_password" type="text" id="isms_smtp_password" value="<?php echo get_option('isms_smtp_password'); ?>" /></div>
