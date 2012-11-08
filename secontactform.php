@@ -629,7 +629,7 @@ function email_sms_html_page(){?>
 <h2>SE Contact Form (SMS Email Contact form)</h2>
   <form method="post" action="options.php">
     <?php settings_fields('email-sms-settings-group'); ?>
-    <?php do_settings_fields('email-sms-settings-group');?>
+    <?php //do_settings_fields('email-sms-settings-group');?>
     
     <table>
       <tr>

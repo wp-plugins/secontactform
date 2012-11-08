@@ -42,6 +42,9 @@ For basic usage, you can also have a look at the [plugin homepage](http://isms.c
 Contact us for any issue, bug fix.
 
 == Changelog ==
+= 1.2.0.1 =
+* Fixed a small bug that causes warning
+
 = 1.2.0 =
 * Some update to CSS style to correct interface problem in admin page
 * Added auto response feature
