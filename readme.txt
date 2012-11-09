@@ -42,6 +42,11 @@ For basic usage, you can also have a look at the [plugin homepage](http://isms.c
 Contact us for any issue, bug fix.
 
 == Changelog ==
+= 1.2.2 =
+* Updated SMS send function to use cURL instead of f_open
+* Updated SMS link to use iSMS SSL link
+* Added auto response for SMS
+
 = 1.2.1 =
 * Added SMTP debug option for better SMTP error handling and debugging
 * Tailing semi-colon are removed from destination email automatically while sending email

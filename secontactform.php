@@ -3,7 +3,7 @@
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
 Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
-Version: 1.2.1
+Version: 1.2.2
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -12,6 +12,18 @@ License: GPL
 if(!isset($_SESSION)){
 	
 	session_start();
+}
+
+function ismscURL($link){
+	
+	$http = curl_init($link);
+	// do your curl thing here
+	curl_setopt($http, CURLOPT_RETURNTRANSFER, TRUE); 
+	$http_result = curl_exec($http);
+	$http_status = curl_getinfo($http, CURLINFO_HTTP_CODE);
+	curl_close($http);
+	
+	return $http_result;
 }
 
 function generate_custom_fieldtype($name, $type){
@@ -486,16 +498,18 @@ function handle_contact_post() {
             mail(str_replace(";", ",", trim(get_option('notification_email'), ";")), (get_option('form_subject')!=""?get_option('form_subject'):"Contact form"), $message, 'From: "Contact Form" <'.get_option('notification_email').">\n");
           }
         }
-        
+        if(get_option("isms_sms_auto_response") == "1" && get_option("isms_sms_auto_response_msg") != "" && get_option('isms_mobile_phone')=="1" && $_POST['imobilephone'] != ""){
+		ismscURL("https://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".$_POST['imobilephone']."&msg=".urlencode(get_option("isms_sms_auto_response_msg"))."&type=1&sendid=wp".get_option('isms_destination'));
+	  }
         if(get_option('isms_full_message')!="1"){
           $message = substr($message, 0, 159);
         }
         if(get_option('isms_addressbook')=="1"){
-          file_get_contents("http://isms.com.my/isms_addressbook.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&phone=".urlencode($_POST['imobilephone'])."&name=".urlencode($_POST['iname'])."&company=".urlencode($_POST['icompany'])."&email=".urlencode($_POST['iemail'])."&dob=".urlencode($_POST['idob']));
+          ismscURL("https://www.isms.com.my/isms_addressbook.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&phone=".urlencode($_POST['imobilephone'])."&name=".urlencode($_POST['iname'])."&company=".urlencode($_POST['icompany'])."&email=".urlencode($_POST['iemail'])."&dob=".urlencode($_POST['idob']));
         }
         
         if(get_option('isms_notification')=="1"){
-          file_get_contents("http://isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=".get_option('isms_destination'));
+          ismscURL("https://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=wp".get_option('isms_destination'));
         }
         if(get_option('isms_smtp_debug')=="1"){
 		
@@ -581,6 +595,8 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'isms_destination' );
   register_setting( 'email-sms-settings-group', 'isms_captcha' );
   register_setting( 'email-sms-settings-group', 'isms_full_message' );
+  register_setting( 'email-sms-settings-group', 'isms_sms_auto_response' );
+  register_setting( 'email-sms-settings-group', 'isms_sms_auto_response_msg' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_notification' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_ssl' );
   register_setting( 'email-sms-settings-group', 'isms_smtp_host' );
@@ -661,7 +677,7 @@ function email_sms_html_page(){?>
             <legend>iSMS</legend>
             <div>Register <a href="http://www.isms.com.my/" target="_blank">isms.com.my</a></div>
               <?php if(get_option('isms_user_name') != "" && get_option('isms_password') != ""){
-                echo "<div><label>iSMS credit</label>".file_get_contents('http://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
+                echo "<div><label>iSMS credit</label>".ismscURL('https://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
               }else{
                 echo "<div><label>iSMS credit</label>Please fill in your iSMS username and password.</div>";
               }?>
@@ -673,7 +689,11 @@ function email_sms_html_page(){?>
             <div><label>Notify owner with SMS</label><input name="isms_notification" type="checkbox" id="isms_notification" value="1" <?php echo get_option('isms_notification')=="1"?"checked":""; ?> /></div>
             <div><label>Add to iSMS address book</label><input name="isms_addressbook" type="checkbox" id="isms_addressbook" value="1" <?php echo get_option('isms_addressbook')=="1"?"checked":""; ?> /></div>
             <div><label>Full message</label><input name="isms_full_message" type="checkbox" id="isms_full_message" value="1" <?php echo get_option('isms_full_message')=="1"?"checked":""; ?> /><span>(Check this option if you would like to received full message, more than 1 credits will be used if message goes over 159 characters)</span></div>
-
+            <div><label>SMS auto response</label><input name="isms_sms_auto_response" type="checkbox" id="isms_sms_auto_response" value="1" <?php echo get_option('isms_sms_auto_response')=="1"?"checked":""; ?> /></div>
+		<div><label>SMS auto response message</label>
+		  <textarea name="isms_sms_auto_response_msg" id="isms_sms_auto_response_msg" cols="45" rows="5"><?php echo get_option('isms_sms_auto_response_msg'); ?></textarea>
+            <span>(Mobile Phone must be enabled.)</span>
+            </div>
           </fieldset>
         </td>
         <td valign="top">
