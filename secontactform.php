@@ -2,8 +2,8 @@
 /* 
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
-Description: A SMS and email contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
-Version: 1.2.2
+Description: A SMS and email plus CRM contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
+Version: 2.0.0
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
