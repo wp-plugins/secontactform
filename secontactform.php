@@ -10,12 +10,10 @@ License: GPL
 */
 
 if(!isset($_SESSION)){
-	
 	session_start();
 }
 
 function ismscURL($link){
-	
 	$http = curl_init($link);
 	// do your curl thing here
 	curl_setopt($http, CURLOPT_RETURNTRANSFER, TRUE); 
@@ -29,12 +27,10 @@ function ismscURL($link){
 function generate_custom_fieldtype($name, $type){
 	switch($type){
 		case "field":{
-	
 			return '<input type="text" name="'.$name.'" id="'.$name.'" />';
 			break;
 		}
 		case "textbox":{
-		
 			return '<textarea name="'.$name.'" id="'.$name.'" cols="45" rows="5"></textarea>';
 			break;
 		}
@@ -42,18 +38,13 @@ function generate_custom_fieldtype($name, $type){
 }
 
 function generate_custom_select_option($name, $options){
-	
 	$options_arr = explode(",", $options);
-	
 	$return = '<select name="'.$name.'" id="'.$name.'">';
 	
 	foreach($options_arr as $value){
-		
 		$return .= '<option value="'.$value.'">'.$value.'</option>';
 	}
-	
 	$return .= '</select>';
-	
 	return $return;
 }
 
@@ -511,10 +502,29 @@ function handle_contact_post() {
         if(get_option('isms_notification')=="1"){
           ismscURL("https://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=wp".get_option('isms_destination'));
         }
+        
+        if(get_option('icrm_check')=="1"){
+          $icrm_un=get_option('icrm_user_name');
+          $icrm_pwd=get_option('icrm_password');
+          $icrm_cc=get_option('icrm_cc');
+          $icrm_grp=get_option('icrm_contact_group');
+          
+          $name=$_POST['iname']." ".$_POST['ifirstname']." ".$_POST['ilastname'];
+          $mobile=$_POST['imobilephone'];
+          $address1=$_POST['iaddress'];
+          $remark=$_POST['isubject']." -- ".$_POST['imessage'];
+          $email=$_POST['iemail'];
+          
+          $icrm_data = array('un'=>$icrm_un, 'pwd'=>$icrm_pwd, 'cc'=>$icrm_cc, 'cn'=>$name, 'address1'=>$address1, 'mobileno'=>$mobile,
+                              'email'=>$email, 'remark'=>$remark, 'group'=>$icrm_grp);
+          $encodedURL="http://login.saas7.com/API/insert_contact_single.php?".http_build_query($icrm_data);
+          ismscURL($encodedURL);
+          
+        }
+        
         if(get_option('isms_smtp_debug')=="1"){
-		
-		
-	  }
+          
+        }
         elseif($no_error == 0){
 		  if(preg_match("/\?/is", $r)){
 			header("Location: $r&demoform_error=1");
@@ -553,6 +563,12 @@ function handle_contact_post() {
   } 
 }
 
+function change_footer_admin () {return '&nbsp;';}
+add_filter('admin_footer_text', 'change_footer_admin', 9999);
+function change_footer_version() {return ' ';}
+add_filter( 'update_footer', 'change_footer_version', 9999);
+
+ 
 add_action('init','handle_contact_post');
 add_shortcode('secontactform', 'contactform_func');
   /* Runs when plugin is activated */
@@ -586,7 +602,6 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'form_title' );
   register_setting( 'email-sms-settings-group', 'form_subject' );
   register_setting( 'email-sms-settings-group', 'form_success_msg' );
-  
   
   register_setting( 'email-sms-settings-group', 'isms_notification' );
   register_setting( 'email-sms-settings-group', 'isms_addressbook' );
@@ -651,6 +666,13 @@ function register_mysettings(){
   register_setting( 'email-sms-settings-group', 'isms_custom_select3' ); register_setting( 'email-sms-settings-group', 'isms_custom_select3_required' );
   register_setting( 'email-sms-settings-group', 'isms_custom_select_name3' );
   register_setting( 'email-sms-settings-group', 'isms_custom_select_option3' );
+
+  register_setting( 'email-sms-settings-group', 'icrm_check' );
+  register_setting( 'email-sms-settings-group', 'icrm_user_name' );
+  register_setting( 'email-sms-settings-group', 'icrm_password' );
+  register_setting( 'email-sms-settings-group', 'icrm_contact_group' );
+  register_setting( 'email-sms-settings-group', 'icrm_cc' );
+
 }
 
 function custom_field_type($name, $type){?>
@@ -662,41 +684,110 @@ function custom_field_type($name, $type){?>
 }
 
 function email_sms_html_page(){?>
-<link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.css">
-<script src="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.js" type="text/javascript"></script>
-<div>
-<h2>SE Contact Form (SMS Email Contact form)</h2>
-  <form method="post" action="options.php">
+  <link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.css">
+  <script src="<?php echo WP_PLUGIN_URL; ?>/secontactform/include/contactform.js" type="text/javascript"></script>
+  <div>
+    <h2>SE Contact Form (SMS Email Contact form)</h2>
+    <form method="post" action="options.php">
     <?php settings_fields('email-sms-settings-group'); ?>
     <?php //do_settings_fields('email-sms-settings-group');?>
     
-    <table>
+    <script>
+      function showHide(element_id){
+        if (document.getElementById(element_id).style.display=="block"){
+          document.getElementById(element_id).style.display="none";
+        }else{
+          document.getElementById(element_id).style.display="block";
+        }
+      }
+      //document.getElementById
+    </script>
+    
+    <div class="feature" onclick="showHide('iSMS_tbl');">SMS Notification Setting</div>
+    <table id="iSMS_tbl" style="display: none">
       <tr>
-        <td valign="top" width="50%">
+        <td valign="top" style="width:450px">
           <fieldset class="bmostyle_admin">
-            <legend>iSMS</legend>
-            <div>Register <a href="http://www.isms.com.my/" target="_blank">isms.com.my</a></div>
-              <?php if(get_option('isms_user_name') != "" && get_option('isms_password') != ""){
-                echo "<div><label>iSMS credit</label>".ismscURL('https://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
-              }else{
-                echo "<div><label>iSMS credit</label>Please fill in your iSMS username and password.</div>";
-              }?>
-            <div><label>iSMS username</label><input name="isms_user_name" type="text" id="isms_user_name" value="<?php echo get_option('isms_user_name'); ?>" /></div>
-            <div><label>iSMS password</label><input name="isms_password" type="text" id="isms_password" value="<?php echo get_option('isms_password'); ?>" /></div>
-            <div><label>Destination Phone</label><input name="isms_destination" type="text" id="isms_destination" value="<?php echo get_option('isms_destination'); ?>" />
-            <span>(Separate multiple phones with semicolon(;). Please insert full phone number including country code.)</span>
-            </div>
-            <div><label>Notify owner with SMS</label><input name="isms_notification" type="checkbox" id="isms_notification" value="1" <?php echo get_option('isms_notification')=="1"?"checked":""; ?> /></div>
-            <div><label>Add to iSMS address book</label><input name="isms_addressbook" type="checkbox" id="isms_addressbook" value="1" <?php echo get_option('isms_addressbook')=="1"?"checked":""; ?> /></div>
-            <div><label>Full message</label><input name="isms_full_message" type="checkbox" id="isms_full_message" value="1" <?php echo get_option('isms_full_message')=="1"?"checked":""; ?> /><span>(Check this option if you would like to received full message, more than 1 credits will be used if message goes over 159 characters)</span></div>
-            <div><label>SMS auto response</label><input name="isms_sms_auto_response" type="checkbox" id="isms_sms_auto_response" value="1" <?php echo get_option('isms_sms_auto_response')=="1"?"checked":""; ?> /></div>
-		<div><label>SMS auto response message</label>
-		  <textarea name="isms_sms_auto_response_msg" id="isms_sms_auto_response_msg" cols="45" rows="5"><?php echo get_option('isms_sms_auto_response_msg'); ?></textarea>
-            <span>(Mobile Phone must be enabled.)</span>
-            </div>
-          </fieldset>
+           <legend>iSMS</legend>
+                 <div><label>&nbsp;</label>Register <a href="http://www.isms.com.my/" target="_blank">isms.com.my</a> and get 5 credits for free!</div>
+                   <?php if(get_option('isms_user_name') != "" && get_option('isms_password') != ""){
+                     echo "<div><label>iSMS credit</label>".ismscURL('https://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
+                   }else{
+                     echo "<div><label>iSMS credit</label>Please fill in your iSMS username and password.</div>";
+                   }?>
+                 <div><label>iSMS username</label><input name="isms_user_name" type="text" id="isms_user_name" value="<?php echo get_option('isms_user_name'); ?>" /></div>
+                 <div><label>iSMS password</label><input name="isms_password" type="text" id="isms_password" value="<?php echo get_option('isms_password'); ?>" /></div>
+                 <div><label>Destination Phone</label><input name="isms_destination" type="text" id="isms_destination" value="<?php echo get_option('isms_destination'); ?>" /></div>
+                 <div><label>&nbsp;</label>Please use semicolon(;) to separate multiple recipient.</div>
+                 <div><label>Notify owner with SMS</label><input name="isms_notification" type="checkbox" id="isms_notification" value="1" <?php echo get_option('isms_notification')=="1"?"checked":""; ?> /></div>
+                 <div><label>Add to iSMS address book</label><input name="isms_addressbook" type="checkbox" id="isms_addressbook" value="1" <?php echo get_option('isms_addressbook')=="1"?"checked":""; ?> /></div>
+                 <div><label>Full message</label><input name="isms_full_message" type="checkbox" id="isms_full_message" value="1" <?php echo get_option('isms_full_message')=="1"?"checked":""; ?> /></div>
+                 <div><label>SMS auto response</label><input name="isms_sms_auto_response" type="checkbox" id="isms_sms_auto_response" value="1" <?php echo get_option('isms_sms_auto_response')=="1"?"checked":""; ?> /></div>
+                 <div><label>Auto response message</label>
+                    <textarea name="isms_sms_auto_response_msg" id="isms_sms_auto_response_msg" cols="45" rows="5"><?php echo get_option('isms_sms_auto_response_msg'); ?></textarea>
+                 </div>
+         </fieldset>          
         </td>
         <td valign="top">
+          <table class="gridtablesmall">
+            <caption>Quick Help</caption>
+            <tr>
+              <th style="width:150px;">Parameter</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>SMS notification</td>
+              <td>Send SMS notification to destination number upon contact form submission.</td>
+            </tr>
+            <tr>
+              <td>isms.com.my</td>
+              <td>Best International Bulk SMS Platform, registration and 5 demo credits are free from <a href="http://isms.com.my" target="_blank">iSMS.com.my</a>.</td>
+            </tr>
+            <tr>
+              <td>iSMS credit</td>
+              <td>Shows how many credits you have in your iSMS account. 1 credit typically equals to 1 SMS.</td>
+            </tr>
+            <tr>
+              <td>iSMS username</td>
+              <td>Fill in iSMS account user name</td>
+            </tr>
+            <tr>
+              <td>iSMS password</td>
+              <td>Fill in iSMS account password</td>
+            </tr>
+            <tr>
+              <td>Destination Phone</td>
+              <td>The phone number to receive the SMS notification. Separate multiple phones with semicolon(;). Please insert full phone number including country code. eg: 65012345678</td>
+            </tr>
+            <tr>
+              <td>Notify owner with SMS</td>
+              <td>Owner is the admin of isms account, the system will retrieve the data from iSMS to send notification.</td>
+            </tr>
+            <tr>
+              <td>Add to iSMS address book</td>
+              <td>Save the name and phone number to iSMS account address book so that admin keep their phone number.</td>
+            </tr>
+            <tr>
+              <td>Full message</td>
+              <td>Check this option if you would like to received full message, more than 1 credits will be used if message goes over 159 characters</td>
+            </tr>
+            <tr>
+              <td>SMS auto response</td>
+              <td>Send a response SMS to user once they submit their contact form.</td>
+            </tr>
+            <tr>
+              <td>Auto response message</td>
+              <td>The message you want to send to user, for example: thank you for submitting your information.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>      
+    </table>
+    
+    <div class="feature" onclick="showHide('email_tbl');">Email Notification Setting (Mandatory)</div>
+    <table id="email_tbl" style="display: none">
+      <tr>
+        <td valign="top" style="width:450px">
           <fieldset class="bmostyle_admin">
           <legend>Email</legend>
             <div><label>Use SMTP server</label><input name="isms_smtp_notification" type="checkbox" id="isms_smtp_notification" value="1" <?php echo get_option('isms_smtp_notification')=="1"?"checked":""; ?> /></div>            
@@ -716,18 +807,123 @@ function email_sms_html_page(){?>
             </div>
           </fieldset>
         </td>
+        <td valign="top">
+          <table class="gridtablesmall">
+            <caption>Quick Help</caption>
+            <tr>
+              <th style="width:150px;">Parameter</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>Email Notification</td>
+              <td>Send email containing the contact information to predefined destination email using SMTP or sendmail.</td>
+            </tr>
+            <tr>
+              <td>Use SMTP server</td>
+              <td>If you have SMTP server, please use SMTP to ensure more reliable delivery.</td>
+            </tr>
+            <tr>
+              <td>SMTP debug</td>
+              <td>If you need user to see the error message at the contact form.</td>
+            </tr>
+            <tr>
+              <td>SMTP host</td>
+              <td>Enter the SMTP server address eg: mail.google.com</td>
+            </tr>
+            <tr>
+              <td>SMTP username</td>
+              <td>The email account username</td>
+            </tr>
+            <tr>
+              <td>SMTP password</td>
+              <td>The email account password</td>
+            </tr>
+            <tr>
+              <td>From email</td>
+              <td>The from email address that you want user to see eg: noreply@mobiweb.com.my</td>
+            </tr>
+            <tr>
+              <td>Use SSL</td>
+              <td>Check this if your email hoster use SSL</td>
+            </tr>
+            <tr>
+              <td>Destination email</td>
+              <td>The receipient of this contact information. Please use semicolon(;) to separate multiple recipient.</td>
+            </tr>
+            <tr>
+              <td>Auto response</td>
+              <td>If you need to send auto response to the user's email.</td>
+            </tr>
+            <tr>
+              <td>Auto response message</td>
+              <td>Send the auto response once the user submitted the contact form. eg: thanks for your enquiry, we will contact you shortly.</td>
+            </tr>
+          </table>
+          
+        </td>
       </tr>
     </table>
-    
-  <fieldset class="bmostyle_admin">
-    <legend>Form setting</legend>
-    <table>
+  
+  <div class="feature" onclick="showHide('icrm');">iCRM (save to CRM database)</div>
+  <table id="icrm" style="display: none">
       <tr>
-        <td valign="top" width="50%">
+        <td valign="top" style="width:450px">
+          <fieldset class="bmostyle_admin">
+            <legend>iCRM</legend>
+            <div>Register at <a href="http://www.icrm.com.my/" target="_blank">icrm.com.my</a> and get 30 days trial for free!</div>
+            <div><label>Save to iCRM</label><input name="icrm_check" type="checkbox" id="icrm_check" value="1" <?php echo get_option('icrm_check')=="1"?"checked":""; ?> /></div>
+            <div><label>iCRM username</label><input name="icrm_user_name" type="text" id="icrm_user_name" value="<?php echo get_option('icrm_user_name'); ?>" /></div>
+            <div><label>iCRM password</label><input name="icrm_password" type="text" id="icrm_password" value="<?php echo get_option('icrm_password'); ?>" /></div>
+            <div><label>iCRM company code</label><input name="icrm_cc" type="text" id="icrm_cc" value="<?php echo get_option('icrm_cc'); ?>" /></div>
+            <div><label>Contact Group</label><input name="icrm_contact_group" type="text" id="icrm_contact_group" value="<?php echo get_option('icrm_contact_group'); ?>" /></div>
+          </fieldset>
+        </td>
+        <td valign="top">
+          <table class="gridtablesmall">
+            <caption>Quick Help</caption>
+            <tr>
+              <th style="width:150px;">Parameter</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>iCRM</td>
+              <td>iCRM is a cloud base Customer Relation Management system at <a href="http://icrm.com.my" target="_blank">icrm.com.my</a>. Free 30 days trial. It is capable of grouping contacts, sending SMS, emails and etc.</td>
+            </tr>
+            <tr>
+              <td>Save to iCRM</td>
+              <td>Check if you have an iCRM account and want to save the information to the account. You will need to login to iCRM to view the saved contact.</td>
+            </tr>
+            <tr>
+              <td>iCRM username</td>
+              <td>Input iCRM username</td>
+            </tr>
+            <tr>
+              <td>iCRM password</td>
+              <td>Input iCRM password</td>
+            </tr>
+            <tr>
+              <td>iCRM company code</td>
+              <td>Company code is unique to each company in iCRM, user specify the company code while registration.</td>
+            </tr>
+            <tr>
+              <td>Contact Group</td>
+              <td>The iCRM contact group can be found inside iCRM account, you can create multiple group and use it here. Just key in the group name, eg: web contact.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+  </table>  
+  
+  
+  <div class="feature" onclick="showHide('cfrm');">Contact Form Setting (put '[secontactform]' at any post or page to show the form.)</div>
+    <table id="cfrm" style="display: none">
+      <tr>
+        <td valign="top" style="width:450px">
+          <fieldset class="bmostyle_admin">
+            <legend>Form setting</legend>
             <div><label>Form Title</label><input name="form_title" type="textbox" id="form_title" value="<?php echo get_option('form_title'); ?>" /></div>
             <div><label>Form Subject</label><input name="form_subject" type="textbox" id="form_subject" value="<?php echo get_option('form_subject'); ?>" /></div>
             <div><label>On success message</label><textarea name="form_success_msg" type="textbox" id="form_success_msg" cols="45" rows="5"><?php echo get_option('form_success_msg'); ?></textarea></div>
-
           
             <div><label>Enable captcha</label><input name="isms_captcha" type="checkbox" id="isms_captcha" value="1" <?php echo get_option('isms_captcha')=="1"?"checked":""; ?> /></div>
             <div><label>First Name</label><input name="isms_first_name" type="checkbox" id="isms_first_name" value="1" <?php echo get_option('isms_first_name')=="1"?"checked":""; ?> /> Required <input name="isms_first_name_required" type="checkbox" id="isms_first_name_required" value="1" <?php echo get_option('isms_first_name_required')=="1"?"checked":""; ?> /></div>
@@ -750,9 +946,38 @@ function email_sms_html_page(){?>
             <div><label>Website</label><input name="isms_website" type="checkbox" id="isms_website" value="1" <?php echo get_option('isms_website')=="1"?"checked":""; ?> /> Required <input name="isms_website_required" type="checkbox" id="isms_website_required" value="1" <?php echo get_option('isms_website_required')=="1"?"checked":""; ?> /></div>
             <div><label>Subject</label><input name="isms_subject" type="checkbox" id="isms_subject" value="1" <?php echo get_option('isms_subject')=="1"?"checked":""; ?> /> Required <input name="isms_subject_required" type="checkbox" id="isms_subject_required" value="1" <?php echo get_option('isms_subject_required')=="1"?"checked":""; ?> /></div>
             <div><label>Message</label><input name="isms_message" type="checkbox" id="isms_message" value="1" <?php echo get_option('isms_message')=="1"?"checked":""; ?> /> Required <input name="isms_message_required" type="checkbox" id="isms_message_required" value="1" <?php echo get_option('isms_message_required')=="1"?"checked":""; ?> /></div>
-            
+          </fieldset>
         </td>
         <td valign="top">
+          <table class="gridtablesmall">
+            <caption>Quick Help</caption>
+            <tr>
+              <th style="width:150px;">Parameter</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>Custom Field</td>
+              <td>Check if you need to show custom field</td>
+            </tr>
+            <tr>
+              <td>Required</td>
+              <td>If the field is required</td>
+            </tr>
+            <tr>
+              <td>Field Type</td>
+              <td>The type of field to show.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+</div>
+    
+<div class="feature" onclick="showHide('efield');">Extra Fields</div>
+  <table id="efield" style="display: none">
+      <tr>
+        <td valign="top" style="width:450px">
+          <fieldset class="bmostyle_admin">
             <div><label>Custom Field 1</label>
               <input name="isms_custom1" type="checkbox" id="isms_custom1" value="1" <?php echo get_option('isms_custom1')=="1"?"checked":""; ?> />
                   Required <input name="isms_custom1_required" type="checkbox" id="isms_custom1_required" value="1" <?php echo get_option('isms_custom1_required')=="1"?"checked":""; ?> />
@@ -804,12 +1029,34 @@ function email_sms_html_page(){?>
             <div><label>Options</label><input name="isms_custom_select_option3" type="text" id="isms_custom_select_option3" value="<?php echo get_option('isms_custom_select_option3'); ?>" />
               <span>(Seperate each option with comma(,))</span>
             </div>
+          </fieldset>
+        </td>
+        <td valign="top">
+          <table class="gridtablesmall">
+            <caption>Quick Help</caption>
+            <tr>
+              <th style="width:150px;">Parameter</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td>Fields</td>
+              <td>The fields are predefined, just check the check box to show on the form, and check required to show if it is required.</td>
+            </tr>
+            <tr>
+              <td>Enable captha</td>
+              <td>A picture for robot verification purpose</td>
+            </tr>
+            <tr>
+              <td>Custom Countries</td>
+              <td>If you need to put specific countries, list it down with semicolon.</td>
+            </tr>
+          </table>
         </td>
       </tr>
-    </table>
-  </fieldset>
+  </table>
   
-<p><input type="submit" value="<?php _e('Save Changes'); ?>" /></p>
+
+  <p><input type="submit" value="<?php _e('Save Changes'); ?>" /></p>
 </form>
 </div>
 <?php }?>
@@ -1039,11 +1286,8 @@ function list_of_countries(){
 	$return = "";
 	$countries_arr = explode(",", $countries);
 	foreach($countries_arr as $value){
-		
 		$return .= '<option value="'.trim($value).'">'.trim($value).'</option>';
-	}
-	
+	}	
 	return $return;
 }
-
 ?>

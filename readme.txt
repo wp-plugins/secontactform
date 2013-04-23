@@ -11,6 +11,7 @@ Contact form plugin, with  SMTP, SMS notification, CAPTCHA and easy configuratio
 == Description ==
 
 SEContactForm (SMS Email Contact Form) comes with email SMTP and send mail capability. It is integrate with http://isms.com.my to provide SMS notification capability. 
+SEContactForm is also able to integrate with iCRM.com.my to provide CRM database to save all inquiries.
 SEContactForm support CAPTCHA for spam filtering, it comes with predefined columns and user can choose to add in as many as 30 fields in a form.
 ISMS.com.my is able to send SMS worldwide with prepaid credit.
 
@@ -41,7 +42,18 @@ For basic usage, you can also have a look at the [plugin homepage](http://isms.c
 [Support](http://isms.com.my/se_contact_form.php)
 Contact us for any issue, bug fix.
 
+== Screenshots ==
+
+1. New layout with SMS setting, Email Setting, CRM database setting, Main Form setting and extra fields.
+2. Setting main contact form.
+3. SE Contact form in web site.
+
 == Changelog ==
+= 2.0.0 =
+* New admin layout, providing user friendly experience.
+* New quick help at right column
+* New integration with http://icrm.com.my to provide CRM database to save all inquiries.
+
 = 1.2.2 =
 * Updated SMS send function to use cURL instead of f_open
 * Updated SMS link to use iSMS SSL link

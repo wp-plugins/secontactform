@@ -40,7 +40,7 @@ table.gridtablesmall {
 }
 table.gridtablesmall th {
 	border-width: 1px;
-	padding: 8px;
+	padding: 5px;
 	border-style: solid;
 	border-color: #666666;
 	background-color: #dedede;
@@ -89,7 +89,7 @@ fieldset.bmostyle div {
 }
 fieldset.bmostyle label {
 	float:left;
-	width:11em;
+	width:130px;
 	text-align:right;
 	margin-right:1em;
     color:#707070;
@@ -167,8 +167,9 @@ fieldset.bmostyle_admin {
 	clear:both;
 	font:1.0em arial, sans-serif;
 	border: 1px solid #ddd;
-	padding:0 0.5em 0.5em;
+	padding:0 0.5em 0.5em;  
   }
+
 fieldset.bmostyle_admin legend {
  	color:#0b77b7;
 	font-size:1.2em;
@@ -187,7 +188,7 @@ fieldset.bmostyle_admin div {
 }
 fieldset.bmostyle_admin label {
 	float:left;
-	width:11em;
+	width:150px;
 	text-align:right;
 	margin-right:1em;
     color:#707070;
@@ -214,7 +215,7 @@ fieldset.bmostyle_admin div span{
 
 fieldset.bmostyle_admin input {
 	padding:0.15em;
-	width:12em;
+	width:200px;
 	border:1px solid #ddd;
 	background:#fafafa;
 	font:bold 1.0em arial, sans-serif;
@@ -304,3 +305,15 @@ input[type=checkbox], input[type=radio]
 	border:1px solid #F2DD8C;
 	background:#FFF5CC url("icons/error.png") no-repeat 8px 50%;
 }
+.feature{
+  cursor: pointer;
+  background-color: #0096ff;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  margin: 0px 0px 10px 0px;
+
+}
+
+#wpfooter { display: none; } 
