@@ -6,7 +6,7 @@ Tested up to: 3.3
 Stable tag: trunk
 License: GPLv2 or later
 
-Contact form plugin, with  SMTP, SMS notification, CAPTCHA and easy configuration.
+Contact form plugin, Email with SMTP, SMS notification, CRM database integration , CAPTCHA and easy configuration.
 
 == Description ==
 
