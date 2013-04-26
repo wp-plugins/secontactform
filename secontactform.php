@@ -2,8 +2,8 @@
 /* 
 Plugin Name: SEContactForm (sms email contact form)
 Plugin URI: http://www.isms.com.my/
-Description: A SMS and email plus CRM contact form with SMTP setup, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
-Version: 2.0.0
+Description: A SMS, email with CRM integrated Contact form. Include SMTP, Captcha and SMS capability. Install and add [secontactform] to any pages or post!
+Version: 2.0.1
 Author: H.P.Ang
 Author URI: http://www.isms.com.my/
 License: GPL
@@ -490,17 +490,17 @@ function handle_contact_post() {
           }
         }
         if(get_option("isms_sms_auto_response") == "1" && get_option("isms_sms_auto_response_msg") != "" && get_option('isms_mobile_phone')=="1" && $_POST['imobilephone'] != ""){
-		ismscURL("https://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".$_POST['imobilephone']."&msg=".urlencode(get_option("isms_sms_auto_response_msg"))."&type=1&sendid=wp".get_option('isms_destination'));
+		ismscURL("http://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".$_POST['imobilephone']."&msg=".urlencode(get_option("isms_sms_auto_response_msg"))."&type=1&sendid=wp".get_option('isms_destination'));
 	  }
         if(get_option('isms_full_message')!="1"){
           $message = substr($message, 0, 159);
         }
         if(get_option('isms_addressbook')=="1"){
-          ismscURL("https://www.isms.com.my/isms_addressbook.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&phone=".urlencode($_POST['imobilephone'])."&name=".urlencode($_POST['iname'])."&company=".urlencode($_POST['icompany'])."&email=".urlencode($_POST['iemail'])."&dob=".urlencode($_POST['idob']));
+          ismscURL("http://www.isms.com.my/isms_addressbook.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&phone=".urlencode($_POST['imobilephone'])."&name=".urlencode($_POST['iname'])."&company=".urlencode($_POST['icompany'])."&email=".urlencode($_POST['iemail'])."&dob=".urlencode($_POST['idob']));
         }
         
         if(get_option('isms_notification')=="1"){
-          ismscURL("https://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=wp".get_option('isms_destination'));
+          ismscURL("http://www.isms.com.my/isms_send.php?un=".get_option('isms_user_name')."&pwd=".get_option('isms_password')."&dstno=".get_option('isms_destination')."&msg=".urlencode($message)."&type=1&sendid=wp".get_option('isms_destination'));
         }
         
         if(get_option('icrm_check')=="1"){
@@ -711,7 +711,7 @@ function email_sms_html_page(){?>
            <legend>iSMS</legend>
                  <div><label>&nbsp;</label>Register <a href="http://www.isms.com.my/" target="_blank">isms.com.my</a> and get 5 credits for free!</div>
                    <?php if(get_option('isms_user_name') != "" && get_option('isms_password') != ""){
-                     echo "<div><label>iSMS credit</label>".ismscURL('https://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
+                     echo "<div><label>iSMS credit</label>".ismscURL('http://www.isms.com.my/isms_balance.php?un='.get_option('isms_user_name').'&pwd='.get_option('isms_password'))." credits</div>";
                    }else{
                      echo "<div><label>iSMS credit</label>Please fill in your iSMS username and password.</div>";
                    }?>

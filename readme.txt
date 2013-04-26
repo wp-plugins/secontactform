@@ -1,6 +1,6 @@
 ===SEContactForm (SMS Email Contact Form)===
 Contributors: mobiweb
-Tags: contact, form, contact form, feedback, email, ajax, captcha, SMS
+Tags: contact, form, contact form, feedback, email, ajax, captcha, SMS, CRM, save contact form
 Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: trunk
@@ -47,6 +47,10 @@ Contact us for any issue, bug fix.
 1. New layout with SMS setting, Email Setting, CRM database setting, Main Form setting and extra fields.
 2. Setting main contact form.
 3. SE Contact form in web site.
+
+== Changelog ==
+= 2.0.1 =
+* Minor update on iSMS API, to use conventional API rather than SSL.
 
 == Changelog ==
 = 2.0.0 =
